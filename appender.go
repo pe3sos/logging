@@ -37,10 +37,11 @@ func Appender(out io.Writer, lvl def.Level, f fmr.Formatter, registry *Logger) L
 // appender. A newline is appended if the last character of s is not
 // already a newline.
 func (a *appender) Output(s string) error {
+	prefix := a.formatter.GetPrefix(a.lvl)
 	a.mu.Lock()
 	defer a.mu.Unlock()
 	a.buf = a.buf[:0]
-	a.buf = append(a.buf, a.formatter.GetPrefix(a.lvl)...)
+	a.buf = append(a.buf, prefix...)
 	a.buf = append(a.buf, ": "...)
 	a.buf = append(a.buf, s...)
 	if len(s) == 0 || s[len(s)-1] != '\n' {
