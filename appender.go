@@ -16,7 +16,7 @@ type appender struct {
 	formatter fmr.Formatter
 	out       io.Writer  // destination for output
 	buf       []byte     // for accumulating text to write
-	mu        sync.Mutex // ensures atomic writes; protects the following fields
+	mu        sync.Mutex // ensures atomic writes;
 }
 
 // New creates a new Appender. The out variable sets the
