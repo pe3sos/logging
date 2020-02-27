@@ -41,7 +41,7 @@ func (f *composableFormatter) GetSuffix(lvl def.Level) string {
 	return sb.String()
 }
 
-// Format adds filename and line number before the log message
+// Format modifies format string and format params list
 func (f *composableFormatter) Format(lvl def.Level, format string, values ...interface{}) (string, []interface{}) {
 	for _, formatter := range f.reverse {
 		format, values = formatter.Format(lvl, format, values...)

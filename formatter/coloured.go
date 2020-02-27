@@ -41,7 +41,7 @@ func (f *coloredFormatter) GetSuffix(lvl def.Level) string {
 	return resetSeq
 }
 
-// Format adds filename and line number before the log message
+// Format modifies format string and format params list
 func (f *coloredFormatter) Format(lvl def.Level, format string, values ...interface{}) (string, []interface{}) {
 	return format, values
 }
