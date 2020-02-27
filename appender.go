@@ -7,13 +7,14 @@ import (
 	"sync"
 
 	"github.com/zippunov/logging/def"
-	fmr "github.com/zippunov/logging/formatter"
 )
+
+const errCode int = 1
 
 type appender struct {
 	registry  *Logger
 	lvl       def.Level
-	formatter fmr.Formatter
+	formatter def.Formatter
 	out       io.Writer  // destination for output
 	buf       []byte     // for accumulating text to write
 	mu        sync.Mutex // ensures atomic writes;
@@ -23,7 +24,7 @@ type appender struct {
 // destination to which log data will be written.
 // The prefix appears at the beginning of each generated log line.
 // The flag argument defines the logging properties.
-func Appender(out io.Writer, lvl def.Level, f fmr.Formatter, registry *Logger) LoggerInterface {
+func Appender(out io.Writer, lvl def.Level, f def.Formatter, registry *Logger) def.LoggerInterface {
 	return &appender{
 		registry:  registry,
 		lvl:       lvl,
@@ -44,7 +45,7 @@ func (a *appender) Output(s string) error {
 	a.buf = append(a.buf, prefix...)
 	a.buf = append(a.buf, ": "...)
 	a.buf = append(a.buf, s...)
-	if len(s) == 0 || s[len(s)-1] != '\n' {
+	if s == "" || s[len(s)-1] != '\n' {
 		a.buf = append(a.buf, '\n')
 	}
 	_, err := a.out.Write(a.buf)
@@ -92,7 +93,7 @@ func (a *appender) Fatal(v ...interface{}) {
 	_, v = a.formatter.Format(a.lvl, "", v...)
 	v = append(v, a.formatter.GetSuffix(a.lvl))
 	_ = a.Output(fmt.Sprint(v...))
-	os.Exit(1)
+	os.Exit(errCode)
 }
 
 // Fatalf is equivalent to l.Printf() followed by a call to os.Exit(1).
@@ -103,7 +104,7 @@ func (a *appender) Fatalf(format string, v ...interface{}) {
 	suffix := a.formatter.GetSuffix(a.lvl)
 	format, v = a.formatter.Format(a.lvl, format, v...)
 	_ = a.Output(fmt.Sprintf(format+suffix, v...))
-	os.Exit(1)
+	os.Exit(errCode)
 }
 
 // Fatalln is equivalent to l.Println() followed by a call to os.Exit(1).
@@ -114,7 +115,7 @@ func (a *appender) Fatalln(v ...interface{}) {
 	_, v = a.formatter.Format(a.lvl, "", v...)
 	v = append(v, a.formatter.GetSuffix(a.lvl))
 	_ = a.Output(fmt.Sprintln(v...))
-	os.Exit(1)
+	os.Exit(errCode)
 }
 
 // Panic is equivalent to l.Print() followed by a call to panic().

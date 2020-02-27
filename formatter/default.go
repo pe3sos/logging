@@ -2,7 +2,7 @@ package formatter
 
 import "github.com/zippunov/logging/def"
 
-func Default() Formatter {
+func Default() def.Formatter {
 	return &defaultFormatter{}
 }
 

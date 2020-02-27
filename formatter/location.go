@@ -8,7 +8,7 @@ import (
 	"github.com/zippunov/logging/def"
 )
 
-func Location(depth int) Formatter {
+func Location(depth int) def.Formatter {
 	return &locationFormatter{Depth: depth}
 }
 

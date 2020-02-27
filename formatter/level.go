@@ -2,15 +2,7 @@ package formatter
 
 import "github.com/zippunov/logging/def"
 
-var levelPrefix = map[def.Level]string{
-	def.DEBUG:   "DEBUG",
-	def.INFO:    "INFO",
-	def.WARNING: "WARNING",
-	def.ERROR:   "ERROR",
-	def.FATAL:   "FATAL",
-}
-
-func Level() Formatter {
+func Level() def.Formatter {
 	return &levelFormatter{}
 }
 
@@ -19,7 +11,7 @@ type levelFormatter struct {
 
 // GetPrefix returns ""
 func (f *levelFormatter) GetPrefix(lvl def.Level) string {
-	return levelPrefix[lvl]
+	return lvl.Name()
 }
 
 // GetSuffix returns ""

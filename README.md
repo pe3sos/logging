@@ -8,7 +8,7 @@ A simple leveled logging library with coloured output.
 ---
 
 Log levels:
-
+- `INFO` (grey)
 - `INFO` (blue)
 - `WARNING` (pink)
 - `ERROR` (red)
@@ -16,8 +16,14 @@ Log levels:
 
 Formatters:
 
-- `DefaultFormatter`
-- `ColouredFormatter`
+- `Default`
+- `Coloured`
+- `Compose`
+- `Date`
+- `Level`
+- `Location`
+- `Time`
+- `Timestamp`
 
 Example usage. Create a new package `log` in your app such that:
 
@@ -25,22 +31,32 @@ Example usage. Create a new package `log` in your app such that:
 package log
 
 import (
-	"log"
+	"os"
+
 	"github.com/zippunov/logging"
+	"github.com/zippunov/logging/def"
+	"github.com/zippunov/logging/formatter"
+)
+
+var f = formatter.Compose(
+	formatter.Coloured(),
+	formatter.Level(),
+	formatter.Timestamp(),
+	formatter.Location(5),
 )
 
 var (
-	logger = logging.New(nil, nil, new(logging.ColouredFormatter), log.Ldate|log.Ltime)
-
-	// INFO ...
-	INFO = logger[logging.INFO]
-	// WARNING ...
-	WARNING = logger[logging.WARNING]
-	// ERROR ...
-	ERROR = logger[logging.ERROR]
-	// FATAL ...
-	FATAL = logger[logging.FATAL]
+	logger  = logging.New(os.Stdout, os.Stdout, f)
+	DEBUG   = logger.DEBUG
+	INFO    = logger.INFO
+	WARNING = logger.WARNING
+	ERROR   = logger.ERROR
+	FATAL   = logger.FATAL
 )
+
+func SetLevel(lvl def.Level) {
+	logger.SetMaxLevel(lvl)
+}
 ```
 
 Then from your app you could do:

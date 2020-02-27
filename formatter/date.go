@@ -7,7 +7,7 @@ import (
 	"github.com/zippunov/logging/def"
 )
 
-func Date() Formatter {
+func Date() def.Formatter {
 	return &dateFormatter{}
 }
 

@@ -6,9 +6,9 @@ import (
 	"github.com/zippunov/logging/def"
 )
 
-func Compose(fms ...Formatter) Formatter {
+func Compose(fms ...def.Formatter) def.Formatter {
 	l := len(fms)
-	reverse := make([]Formatter, len(fms))
+	reverse := make([]def.Formatter, len(fms))
 	for idx, el := range fms {
 		reverse[l-idx-1] = el
 	}
@@ -16,8 +16,8 @@ func Compose(fms ...Formatter) Formatter {
 }
 
 type composableFormatter struct {
-	straight []Formatter
-	reverse  []Formatter
+	straight []def.Formatter
+	reverse  []def.Formatter
 }
 
 func (f *composableFormatter) GetPrefix(lvl def.Level) string {

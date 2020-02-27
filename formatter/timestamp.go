@@ -7,8 +7,10 @@ import (
 	"github.com/zippunov/logging/def"
 )
 
+const nanosInMillis int = 1e3
+
 // Cheap integer to fixed-width decimal ASCII. Give a negative width to avoid zero-padding.
-func itoa(i int, wid int) []byte {
+func itoa(i, wid int) []byte {
 	// Assemble decimal in reverse order.
 	var b [20]byte
 	bp := len(b) - 1
@@ -24,7 +26,7 @@ func itoa(i int, wid int) []byte {
 	return b[bp:]
 }
 
-func Timestamp() Formatter {
+func Timestamp() def.Formatter {
 	return &timestampFormatter{}
 }
 
@@ -48,7 +50,7 @@ func (f *timestampFormatter) GetPrefix(lvl def.Level) string {
 	sb.WriteRune(':')
 	sb.Write(itoa(sec, 2))
 	sb.WriteRune('.')
-	sb.Write(itoa(t.Nanosecond()/1e3, 6))
+	sb.Write(itoa(t.Nanosecond()/nanosInMillis, 6))
 	return sb.String()
 }
 
@@ -56,6 +58,7 @@ func (f *timestampFormatter) GetSuffix(lvl def.Level) string {
 	return ""
 }
 
+// Format modifies format string and format params list
 func (f *timestampFormatter) Format(lvl def.Level, format string, values ...interface{}) (string, []interface{}) {
 	return format, values
 }

@@ -10,11 +10,11 @@ import (
 
 type Logger struct {
 	maxLvl  def.Level
-	DEBUG   LoggerInterface
-	INFO    LoggerInterface
-	WARNING LoggerInterface
-	ERROR   LoggerInterface
-	FATAL   LoggerInterface
+	DEBUG   def.LoggerInterface
+	INFO    def.LoggerInterface
+	WARNING def.LoggerInterface
+	ERROR   def.LoggerInterface
+	FATAL   def.LoggerInterface
 }
 
 func (l *Logger) GetMaxLevel() def.Level {
@@ -25,8 +25,7 @@ func (l *Logger) SetMaxLevel(lvl def.Level) {
 	l.maxLvl = lvl
 }
 
-func New(out, errOut io.Writer, f fmr.Formatter) *Logger {
-
+func New(out, errOut io.Writer, f def.Formatter) *Logger {
 	if out == nil {
 		out = os.Stdout
 	}
@@ -36,11 +35,11 @@ func New(out, errOut io.Writer, f fmr.Formatter) *Logger {
 	if f == nil {
 		f = fmr.Default()
 	}
-	l := &Logger{maxLvl: def.DEBUG}
-	l.DEBUG = Appender(out, def.DEBUG, f, l)
-	l.INFO = Appender(out, def.INFO, f, l)
-	l.WARNING = Appender(out, def.WARNING, f, l)
-	l.ERROR = Appender(errOut, def.ERROR, f, l)
-	l.FATAL = Appender(errOut, def.ERROR, f, l)
+	l := &Logger{maxLvl: def.Levels.DEBUG}
+	l.DEBUG = Appender(out, def.Levels.DEBUG, f, l)
+	l.INFO = Appender(out, def.Levels.INFO, f, l)
+	l.WARNING = Appender(out, def.Levels.WARNING, f, l)
+	l.ERROR = Appender(errOut, def.Levels.ERROR, f, l)
+	l.FATAL = Appender(errOut, def.Levels.FATAL, f, l)
 	return l
 }
