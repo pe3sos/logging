@@ -27,7 +27,7 @@ func (f *locationFormatter) GetSuffix(lvl def.Level) string {
 	return ""
 }
 
-// Format adds filename and line number before the log message
+// Format modifies format string and format params list
 func (f *locationFormatter) Format(lvl def.Level, format string, values ...interface{}) (string, []interface{}) {
 	return format, values
 }

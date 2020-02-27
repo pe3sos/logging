@@ -37,6 +37,7 @@ func (f *timeFormatter) GetSuffix(lvl def.Level) string {
 	return ""
 }
 
+// Format modifies format string and format params list
 func (f *timeFormatter) Format(lvl def.Level, format string, values ...interface{}) (string, []interface{}) {
 	return format, values
 }
